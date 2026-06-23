@@ -1,0 +1,56 @@
+{
+	"name": "n8n-nodes-statista-api",
+	"version": "0.1.0",
+	"description": "n8n community node for the Statista REST API (statistics, consumer insights, and market insights)",
+	"license": "MIT",
+	"homepage": "https://github.com/statista-oss/statista-n8n-api-node#readme",
+	"keywords": [
+		"n8n-community-node-package",
+		"statista",
+		"statista-api"
+	],
+	"author": {
+		"name": "Statista GmbH",
+		"email": "anas.asghar@statista.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/statista-oss/statista-n8n-api-node.git"
+	},
+	"bugs": {
+		"url": "https://github.com/statista-oss/statista-n8n-api-node/issues"
+	},
+	"main": "index.js",
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "n8n-node build",
+		"build:watch": "tsc --watch",
+		"dev": "n8n-node dev",
+		"lint": "n8n-node lint",
+		"lint:fix": "n8n-node lint --fix",
+		"prepublishOnly": "n8n-node prerelease"
+	},
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"strict": true,
+		"credentials": [
+			"dist/credentials/StatistaApi.credentials.js"
+		],
+		"nodes": [
+			"dist/nodes/StatistaApi/StatistaApi.node.js"
+		]
+	},
+	"devDependencies": {
+		"@n8n/node-cli": "^0.35.1",
+		"@types/node": "^18.0.0",
+		"eslint": "^9.29.0",
+		"n8n-workflow": "^2.16.0",
+		"prettier": "^3.8.4",
+		"typescript": "^5.0.0"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	}
+}

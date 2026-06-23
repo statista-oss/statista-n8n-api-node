@@ -1,0 +1,17 @@
+{
+	"node": "statistaApi",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Data & Storage"],
+	"subcategories": {
+		"Data & Storage": ["API"]
+	},
+	"alias": ["Statista", "Statistics", "Market Data", "Consumer Insights"],
+	"resources": {
+		"primaryDocumentation": [
+			{
+				"url": "https://docs.platform.statista.ai/api-reference/introduction"
+			}
+		]
+	}
+}
