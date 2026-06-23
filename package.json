@@ -21,6 +21,9 @@
 		"url": "https://github.com/statista-oss/statista-n8n-api-node/issues"
 	},
 	"main": "index.js",
+	"publishConfig": {
+		"access": "public"
+	},
 	"files": [
 		"dist"
 	],
