@@ -1,11 +1,8 @@
 {
-	"node": "statistaApi",
+	"node": "n8n-nodes-statista-api.statistaApi",
 	"nodeVersion": "1.0",
 	"codexVersion": "1.0",
 	"categories": ["Data & Storage"],
-	"subcategories": {
-		"Data & Storage": ["API"]
-	},
 	"alias": ["Statista", "Statistics", "Market Data", "Consumer Insights"],
 	"resources": {
 		"primaryDocumentation": [

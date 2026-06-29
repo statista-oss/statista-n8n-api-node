@@ -99,9 +99,6 @@ export class StatistaApi implements INodeType {
 		},
 		codex: {
 			categories: ['Data & Storage'],
-			subcategories: {
-				'Data & Storage': ['API'],
-			},
 			alias: ['Statista', 'Statistics', 'Market Data', 'Consumer Insights'],
 			resources: {
 				primaryDocumentation: [
@@ -410,20 +407,31 @@ export class StatistaApi implements INodeType {
 			const resource = this.getNodeParameter('resource', i) as string;
 			const operation = this.getNodeParameter('operation', i) as string;
 
-			try {
-				if (resource === 'statistics' && operation === 'search') {
-					const query = this.getNodeParameter('query', i) as string;
-					requireNonEmptyQuery(this, query, i);
+			const handleApiError = (error: unknown): void => {
+				if (this.continueOnFail()) {
+					returnData.push({
+						json: { error: (error as Error).message } as IDataObject,
+						pairedItem: { item: i },
+					});
+					return;
+				}
+				throw new NodeApiError(this.getNode(), error as JsonObject, { itemIndex: i });
+			};
 
-					const returnAll = this.getNodeParameter('returnAll', i) as boolean;
-					const limit = returnAll ? 50 : (this.getNodeParameter('limit', i) as number);
-					const filters = this.getNodeParameter('additionalFilters', i) as Record<string, string>;
+			if (resource === 'statistics' && operation === 'search') {
+				const query = this.getNodeParameter('query', i) as string;
+				requireNonEmptyQuery(this, query, i);
 
-					const qs: Record<string, string | number | boolean> = { q: query };
-					if (filters.date_from) qs.date_from = filters.date_from;
-					if (filters.date_to) qs.date_to = filters.date_to;
-					if (filters.premium && filters.premium !== 'all') qs.premium = filters.premium === 'true';
+				const returnAll = this.getNodeParameter('returnAll', i) as boolean;
+				const limit = returnAll ? 50 : (this.getNodeParameter('limit', i) as number);
+				const filters = this.getNodeParameter('additionalFilters', i) as Record<string, string>;
 
+				const qs: Record<string, string | number | boolean> = { q: query };
+				if (filters.date_from) qs.date_from = filters.date_from;
+				if (filters.date_to) qs.date_to = filters.date_to;
+				if (filters.premium && filters.premium !== 'all') qs.premium = filters.premium === 'true';
+
+				try {
 					const itemsResult = await fetchPaginatedItems(
 						this,
 						`${BASE_URL}/search/statistics`,
@@ -434,10 +442,14 @@ export class StatistaApi implements INodeType {
 					returnData.push(
 						...itemsResult.map((item) => ({ json: item, pairedItem: { item: i } })),
 					);
-				} else if (resource === 'statistics' && operation === 'getData') {
-					const statisticId = this.getNodeParameter('statisticId', i) as number;
-					requirePositiveStatisticId(this, statisticId, i);
+				} catch (error) {
+					handleApiError(error);
+				}
+			} else if (resource === 'statistics' && operation === 'getData') {
+				const statisticId = this.getNodeParameter('statisticId', i) as number;
+				requirePositiveStatisticId(this, statisticId, i);
 
+				try {
 					const response = await this.helpers.httpRequestWithAuthentication.call(this, 'statistaApi', {
 						method: 'GET',
 						url: `${BASE_URL}/data/statistic`,
@@ -445,13 +457,17 @@ export class StatistaApi implements INodeType {
 						returnFullResponse: false,
 					});
 					returnData.push({ json: response as IDataObject, pairedItem: { item: i } });
-				} else if (resource === 'consumerInsights' && operation === 'search') {
-					const query = this.getNodeParameter('query', i) as string;
-					requireNonEmptyQuery(this, query, i);
+				} catch (error) {
+					handleApiError(error);
+				}
+			} else if (resource === 'consumerInsights' && operation === 'search') {
+				const query = this.getNodeParameter('query', i) as string;
+				requireNonEmptyQuery(this, query, i);
 
-					const returnAll = this.getNodeParameter('returnAll', i) as boolean;
-					const limit = returnAll ? 25 : (this.getNodeParameter('limit', i) as number);
+				const returnAll = this.getNodeParameter('returnAll', i) as boolean;
+				const limit = returnAll ? 25 : (this.getNodeParameter('limit', i) as number);
 
+				try {
 					const response = await this.helpers.httpRequestWithAuthentication.call(this, 'statistaApi', {
 						method: 'GET',
 						url: `${BASE_URL}/search/consumer-insights`,
@@ -462,21 +478,25 @@ export class StatistaApi implements INodeType {
 					returnData.push(
 						...(result.results ?? []).map((item) => ({ json: item, pairedItem: { item: i } })),
 					);
-				} else if (resource === 'consumerInsights' && operation === 'getData') {
-					const rows = this.getNodeParameter('rows', i) as string;
-					requireNonEmptyString(this, rows, 'Rows', i);
+				} catch (error) {
+					handleApiError(error);
+				}
+			} else if (resource === 'consumerInsights' && operation === 'getData') {
+				const rows = this.getNodeParameter('rows', i) as string;
+				requireNonEmptyString(this, rows, 'Rows', i);
 
-					const columns = this.getNodeParameter('columns', i, '') as string;
-					const filters = this.getNodeParameter('filters', i, '') as string;
-					const country = this.getNodeParameter('country', i, '') as string;
-					const year = this.getNodeParameter('year', i) as number;
+				const columns = this.getNodeParameter('columns', i, '') as string;
+				const filters = this.getNodeParameter('filters', i, '') as string;
+				const country = this.getNodeParameter('country', i, '') as string;
+				const year = this.getNodeParameter('year', i) as number;
 
-					const qs: Record<string, string | number> = { rows };
-					if (columns) qs.columns = columns;
-					if (filters) qs.filters = filters;
-					if (country) qs.country = country;
-					if (year > 0) qs.year = year;
+				const qs: Record<string, string | number> = { rows };
+				if (columns) qs.columns = columns;
+				if (filters) qs.filters = filters;
+				if (country) qs.country = country;
+				if (year > 0) qs.year = year;
 
+				try {
 					const response = await this.helpers.httpRequestWithAuthentication.call(this, 'statistaApi', {
 						method: 'GET',
 						url: `${BASE_URL}/data/consumer-insights`,
@@ -484,13 +504,17 @@ export class StatistaApi implements INodeType {
 						returnFullResponse: false,
 					});
 					returnData.push({ json: response as IDataObject, pairedItem: { item: i } });
-				} else if (resource === 'marketInsights' && operation === 'search') {
-					const query = this.getNodeParameter('query', i) as string;
-					requireNonEmptyQuery(this, query, i);
+				} catch (error) {
+					handleApiError(error);
+				}
+			} else if (resource === 'marketInsights' && operation === 'search') {
+				const query = this.getNodeParameter('query', i) as string;
+				requireNonEmptyQuery(this, query, i);
 
-					const returnAll = this.getNodeParameter('returnAll', i) as boolean;
-					const limit = returnAll ? 25 : (this.getNodeParameter('limit', i) as number);
+				const returnAll = this.getNodeParameter('returnAll', i) as boolean;
+				const limit = returnAll ? 25 : (this.getNodeParameter('limit', i) as number);
 
+				try {
 					const response = await this.helpers.httpRequestWithAuthentication.call(this, 'statistaApi', {
 						method: 'GET',
 						url: `${BASE_URL}/search/market-insights/indicators`,
@@ -501,9 +525,16 @@ export class StatistaApi implements INodeType {
 					returnData.push(
 						...(result.items ?? []).map((item) => ({ json: item, pairedItem: { item: i } })),
 					);
-				} else if (resource === 'marketInsights' && operation === 'getData') {
-					const indicatorId = this.getNodeParameter('indicatorId', i) as string;
-					const geo = this.getNodeParameter('geo', i) as string;
+				} catch (error) {
+					handleApiError(error);
+				}
+			} else if (resource === 'marketInsights' && operation === 'getData') {
+				const indicatorId = this.getNodeParameter('indicatorId', i) as string;
+				requireNonEmptyString(this, indicatorId, 'Indicator ID', i);
+
+				const geo = this.getNodeParameter('geo', i) as string;
+
+				try {
 					const response = await this.helpers.httpRequestWithAuthentication.call(this, 'statistaApi', {
 						method: 'GET',
 						url: `${BASE_URL}/data/market-insights/indicator`,
@@ -511,22 +542,15 @@ export class StatistaApi implements INodeType {
 						returnFullResponse: false,
 					});
 					returnData.push({ json: response as IDataObject, pairedItem: { item: i } });
-				} else {
-					throw new NodeOperationError(
-						this.getNode(),
-						`Unknown operation "${operation}" for resource "${resource}"`,
-						{ itemIndex: i },
-					);
+				} catch (error) {
+					handleApiError(error);
 				}
-			} catch (error) {
-				if (this.continueOnFail()) {
-					returnData.push({
-						json: { error: (error as Error).message } as IDataObject,
-						pairedItem: { item: i },
-					});
-					continue;
-				}
-				throw new NodeApiError(this.getNode(), error as JsonObject, { itemIndex: i });
+			} else {
+				throw new NodeOperationError(
+					this.getNode(),
+					`Unknown operation "${operation}" for resource "${resource}"`,
+					{ itemIndex: i },
+				);
 			}
 		}
 
