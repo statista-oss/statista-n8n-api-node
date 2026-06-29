@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-statista-api",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "n8n community node for the Statista REST API (statistics, consumer insights, and market insights)",
 	"license": "MIT",
 	"homepage": "https://github.com/statista-oss/statista-n8n-api-node#readme",
