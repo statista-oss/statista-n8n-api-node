@@ -84,7 +84,7 @@ async function fetchPaginatedItems(
 
 export class StatistaApi implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Statista API',
+		displayName: 'Statista Connect',
 		name: 'statistaApi',
 		icon: 'file:statista.svg',
 		group: ['transform'],
@@ -92,14 +92,14 @@ export class StatistaApi implements INodeType {
 		defaultVersion: 1,
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		description:
-			'Consume the Statista REST API for statistics, consumer insights, and market insights (search and data endpoints).',
+			'Access Statista Connect to search and retrieve statistics, consumer insights, and market insights for your workflows.',
 		documentationUrl: 'https://docs.platform.statista.ai/api-reference/introduction',
 		defaults: {
-			name: 'Statista API',
+			name: 'Statista Connect',
 		},
 		codex: {
 			categories: ['Data & Storage'],
-			alias: ['Statista', 'Statistics', 'Market Data', 'Consumer Insights'],
+			alias: ['Statista', 'Statista Connect', 'Statistics', 'Market Data', 'Consumer Insights'],
 			resources: {
 				primaryDocumentation: [
 					{

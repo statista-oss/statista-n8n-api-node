@@ -3,7 +3,7 @@
 	"nodeVersion": "1.0",
 	"codexVersion": "1.0",
 	"categories": ["Data & Storage"],
-	"alias": ["Statista", "Statistics", "Market Data", "Consumer Insights"],
+	"alias": ["Statista", "Statista Connect", "Statistics", "Market Data", "Consumer Insights"],
 	"resources": {
 		"primaryDocumentation": [
 			{

@@ -1,6 +1,6 @@
 # n8n-nodes-statista-api
 
-Official community node for the [Statista REST API](https://docs.platform.statista.ai/api-reference/introduction). Search and retrieve statistics, consumer insights, and market insights from Statista inside n8n workflows.
+Official community node for [Statista Connect](https://docs.platform.statista.ai/api-reference/introduction). Bring trusted Statista statistics, consumer insights, and market insights into n8n workflows.
 
 ## Installation
 
@@ -22,7 +22,7 @@ Mount the package folder to your n8n custom extensions directory, then restart n
 
 ## Credentials
 
-Create **Statista API** credentials with your API key.
+Create **Statista Connect API** credentials with your API key.
 
 - Get an API key at [platform.statista.ai/join](https://platform.statista.ai/join)
 - Authentication docs: [Statista authentication](https://docs.platform.statista.ai/start/authentication)
@@ -54,15 +54,15 @@ The credential test runs a lightweight statistics search to verify your key.
 
 ## Example workflow
 
-1. Add a **Statista API** node.
+1. Add a **Statista Connect** node.
 2. Select **Resource → Statistics**, **Operation → Search**.
 3. Set **Query** to `e.g. electric vehicles`.
-4. Connect a second **Statista API** node with **Operation → Get Data** and pass a statistic ID from the search results.
+4. Connect a second **Statista Connect** node with **Operation → Get Data** and pass a statistic ID from the search results.
 
 ## Resources
 
-- [Statista API reference](https://docs.platform.statista.ai/api-reference/introduction)
-- [Statista platform](https://platform.statista.ai/)
+- [Statista Connect API reference](https://docs.platform.statista.ai/api-reference/introduction)
+- [Statista Connect platform](https://platform.statista.ai/)
 
 ## License
 

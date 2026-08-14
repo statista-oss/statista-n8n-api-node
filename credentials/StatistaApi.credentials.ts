@@ -7,7 +7,7 @@ import {
 
 export class StatistaApi implements ICredentialType {
 	name = 'statistaApi';
-	displayName = 'Statista API';
+	displayName = 'Statista Connect API';
 	icon = {
 		light: 'file:../nodes/StatistaApi/statista.svg',
 		dark: 'file:../nodes/StatistaApi/statista.svg',
@@ -22,7 +22,7 @@ export class StatistaApi implements ICredentialType {
 			default: '',
 			required: true,
 			description:
-				'Your Statista API key. Request one at https://platform.statista.ai/join',
+				'Your Statista Connect API key. Request one at https://platform.statista.ai/join',
 		},
 	];
 
